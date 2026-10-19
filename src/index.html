@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Politica de seguridad: scripts y estilos propios; los posters son imagenes https;
+         la interfaz no hace peticiones de red (los datos llegan por IPC desde main.js) -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'none'">
+    <title>Catálogo de Series</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <h1>Catálogo de <span>Series</span></h1>
+        <p id="version-electron"></p>
+    </header>
+
+    <main class="contenedor">
+
+        <!-- ================= Buscador y filtros ================= -->
+        <section class="controles" aria-label="Búsqueda y filtros">
+            <div class="campo campo-busqueda">
+                <label for="buscador">Buscar</label>
+                <input type="search" id="buscador" placeholder="Título, género o cadena (ej. Breaking, HBO)" autocomplete="off">
+            </div>
+
+            <div class="campo">
+                <label for="filtro-genero">Género</label>
+                <select id="filtro-genero"><option value="">Todos</option></select>
+            </div>
+
+            <div class="campo">
+                <label for="filtro-estado">Estado</label>
+                <select id="filtro-estado"><option value="">Todos</option></select>
+            </div>
+
+            <div class="campo">
+                <label for="filtro-idioma">Idioma</label>
+                <select id="filtro-idioma"><option value="">Todos</option></select>
+            </div>
+
+            <div class="campo">
+                <label for="filtro-decada">Década de estreno</label>
+                <select id="filtro-decada"><option value="">Todas</option></select>
+            </div>
+
+            <div class="campo">
+                <label for="orden">Ordenar por</label>
+                <select id="orden">
+                    <option value="calificacion">Mejor calificadas</option>
+                    <option value="nombre">Título (A-Z)</option>
+                    <option value="reciente">Más recientes</option>
+                    <option value="antigua">Más antiguas</option>
+                </select>
+            </div>
+
+            <div class="acciones">
+                <button id="btn-limpiar" type="button" class="secundario">Limpiar filtros</button>
+                <button id="btn-actualizar" type="button">Actualizar datos</button>
+            </div>
+        </section>
+
+        <p id="contador" class="contador" role="status"></p>
+
+        <section id="cargando" class="cargando">
+            <div class="spinner"></div>
+            <strong>Cargando series...</strong>
+        </section>
+
+        <p id="mensaje-aviso" class="mensaje-aviso d-none" role="status"></p>
+        <p id="mensaje-error" class="mensaje-error d-none" role="alert"></p>
+        <p id="sin-resultados" class="sin-resultados d-none">No se encontraron series con esos criterios.</p>
+
+        <div id="lista" class="grid"></div>
+
+        <div class="mas">
+            <button id="btn-mas" type="button" class="d-none">Mostrar más series</button>
+        </div>
+    </main>
+
+    <!-- Detalle de una serie (ventana modal nativa del navegador) -->
+    <dialog id="detalle" class="detalle" aria-labelledby="detalle-titulo">
+        <button id="detalle-cerrar" type="button" class="cerrar" aria-label="Cerrar">&times;</button>
+        <div class="detalle-contenido">
+            <img id="detalle-img" class="detalle-img" alt="">
+            <div class="detalle-texto">
+                <h2 id="detalle-titulo"></h2>
+                <p id="detalle-meta" class="detalle-meta"></p>
+                <dl id="detalle-datos"></dl>
+                <p id="detalle-resumen" class="detalle-resumen"></p>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Template: este HTML no se renderiza hasta que se clona desde JavaScript -->
+    <template id="template-serie">
+        <article class="tarjeta" tabindex="0">
+            <div class="poster">
+                <img class="poster-img" alt="" loading="lazy">
+                <span class="sin-poster d-none">Sin imagen</span>
+                <span class="nota"></span>
+            </div>
+            <div class="tarjeta-cuerpo">
+                <h2 class="nombre"></h2>
+                <p class="estado"><span class="punto"></span><span class="estado-texto"></span></p>
+                <p class="generos"></p>
+                <dl>
+                    <dt>Estreno</dt>
+                    <dd class="anio"></dd>
+                    <dt>Cadena</dt>
+                    <dd class="cadena"></dd>
+                    <dt>Idioma</dt>
+                    <dd class="idioma"></dd>
+                </dl>
+            </div>
+        </article>
+    </template>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
